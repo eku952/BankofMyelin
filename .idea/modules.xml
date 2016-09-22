@@ -2,7 +2,7 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/.idea/modules/BankofMyelin.iml" filepath="$PROJECT_DIR$/.idea/modules/BankofMyelin.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/Myelin.iml" filepath="$PROJECT_DIR$/.idea/modules/Myelin.iml" />
       <module fileurl="file://$PROJECT_DIR$/.idea/modules/Myelin_main.iml" filepath="$PROJECT_DIR$/.idea/modules/Myelin_main.iml" group="Myelin" />
       <module fileurl="file://$PROJECT_DIR$/.idea/modules/Myelin_test.iml" filepath="$PROJECT_DIR$/.idea/modules/Myelin_test.iml" group="Myelin" />
     </modules>
