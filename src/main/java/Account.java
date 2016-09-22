@@ -5,22 +5,27 @@ import com.google.firebase.database.*;
 
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Scanner;
 
 public class Account {
 
-    private String username;
-    private int PIN;
-    private int balance;
+    public String firstName;
+    public String lastName;
+    public int PIN;
+    public int balance;
 
     final FirebaseDatabase database = FirebaseDatabase.getInstance();
+    DatabaseReference reference = database.getReference("Users");
     public static Firebase firebase = null;
     static Scanner scanner = new Scanner(System.in);
 
-    public Account(String username, int PIN) {
-        this.username = username;
+    public Account(String firstName, String lastName, int PIN) {
+        this.firstName = firstName;
+        this.lastName = lastName;
         this.PIN = PIN;
-        this.balance = 5;
+        balance = 5;
     }
 
     public static void firebaseInit() {
@@ -45,8 +50,8 @@ public class Account {
 
         DatabaseReference ref = FirebaseDatabase
                 .getInstance()
-                .getReference("Customers");
-        ref.addListenerForSingleValueEvent(new ValueEventListener() {
+                .getReference("Users");
+        /*ref.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 Object document = dataSnapshot.getValue();
@@ -57,17 +62,6 @@ public class Account {
             public void onCancelled(DatabaseError databaseError) {
 
             }
-        });
+        }); */
     }
-
-    public static Account createNewUser() {
-        System.out.println("Please create a username.");
-        String newUsername = scanner.nextLine();
-
-        System.out.println("Please create a PIN (numbers only).");
-        int newPIN = scanner.nextInt();
-
-        return new Account(newUsername, newPIN);
-    }
-
 }

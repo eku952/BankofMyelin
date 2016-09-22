@@ -1,3 +1,8 @@
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Scanner;
 
 
@@ -12,7 +17,8 @@ public class Main {
     public static void main(String[] args) {
         Scanner scanner = new Scanner(System.in);
         Account.firebaseInit();
-
+        final FirebaseDatabase database = FirebaseDatabase.getInstance();
+        DatabaseReference reference = database.getReference("Users");
         //System.out.println(firebase.toString());
 
         while(startup) {
@@ -31,7 +37,24 @@ public class Main {
             else if(response.toLowerCase().equals("no")) {
                 login = true;
                 startup = false;
-                Account.createNewUser();
+
+                System.out.println("Please create a username.");
+                String newUsername = scanner.nextLine();
+
+                System.out.println("Please enter your first name.");
+                String newFirstName = scanner.nextLine();
+
+                System.out.println("Please enter your last name.");
+                String newLastName = scanner.nextLine();
+
+                System.out.println("Please create a PIN (numbers only).");
+                int newPIN = scanner.nextInt();
+
+                DatabaseReference accountRef = reference.child("Accounts");
+
+                Map<String, Account> accounts = new HashMap<String, Account>();
+                accounts.put(newUsername, new Account(newFirstName, newLastName, newPIN));
+                accountRef.setValue(accounts);
             }
         }
 
