@@ -52,9 +52,7 @@ public class Main {
 
                 DatabaseReference accountRef = reference.child("Accounts");
 
-                Map<String, Account> accounts = new HashMap<String, Account>();
-                accounts.put(newUsername, new Account(newFirstName, newLastName, newPIN));
-                accountRef.setValue(accounts);
+                accountRef.child(newUsername).setValue(new Account(newFirstName, newLastName, newPIN));
             }
         }
 
