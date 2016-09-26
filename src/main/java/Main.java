@@ -33,8 +33,8 @@ public class Main {
                 reference.addValueEventListener(new ValueEventListener() {
                     @Override
                     public void onDataChange(DataSnapshot dataSnapshot) {
-                        Account account = dataSnapshot.getValue(Account.class);
-                        System.out.println(account);
+                        Account mainAccount = dataSnapshot.getValue(Account.class);
+                        System.out.println(mainAccount);
                     }
 
                     @Override

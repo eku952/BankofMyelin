@@ -28,6 +28,26 @@ public class Account {
         balance = 5;
     }
 
+    public String getFirstName() {
+        return firstName;
+    }
+
+    public String getLastName() {
+        return lastName;
+    }
+
+    public int getPIN() {
+        return PIN;
+    }
+
+    public int getBalance() {
+        return balance;
+    }
+
+    public Account() {
+
+    }
+
     public static void firebaseInit() {
         firebase = new Firebase("https://bank-of-myelin.firebaseio.com/");
 
