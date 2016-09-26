@@ -1,5 +1,4 @@
-import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.*;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -30,6 +29,19 @@ public class Main {
 
                 System.out.println("Please insert your PIN.");
                 int tempPIN = scanner.nextInt();
+
+                reference.addValueEventListener(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(DataSnapshot dataSnapshot) {
+                        Account account = dataSnapshot.getValue(Account.class);
+                        System.out.println(account);
+                    }
+
+                    @Override
+                    public void onCancelled(DatabaseError databaseError) {
+                        System.out.println("Failed to read the database.");
+                    }
+                });
 
                 login = true;
                 startup = false;
