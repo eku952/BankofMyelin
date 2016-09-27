@@ -1,19 +1,19 @@
 import com.firebase.client.Firebase;
 import com.google.firebase.FirebaseApp;
 import com.google.firebase.FirebaseOptions;
-import com.google.firebase.database.*;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
-import java.util.HashMap;
-import java.util.Map;
 import java.util.Scanner;
 
 public class Account {
 
+    public String username;
     public String firstName;
     public String lastName;
-    public int PIN;
+    public int pin;
     public int balance;
 
     final FirebaseDatabase database = FirebaseDatabase.getInstance();
@@ -21,10 +21,20 @@ public class Account {
     public static Firebase firebase = null;
     static Scanner scanner = new Scanner(System.in);
 
-    public Account(String firstName, String lastName, int PIN) {
+    public String getUsername() {
+        return username;
+    }
+
+    public void setUsername(String username) {
+        this.username = username;
+    }
+
+    public Account(String username, String firstName, String lastName, int pin) {
+        this.username = username;
+
         this.firstName = firstName;
         this.lastName = lastName;
-        this.PIN = PIN;
+        this.pin = pin;
         balance = 5;
     }
 
@@ -32,20 +42,35 @@ public class Account {
         return firstName;
     }
 
+    public void setFirstName(String firstName) {
+        this.firstName = firstName;
+    }
+
     public String getLastName() {
         return lastName;
     }
 
-    public int getPIN() {
-        return PIN;
+    public void setLastName(String lastName) {
+        this.lastName = lastName;
+    }
+
+    public int getPin() {
+        return pin;
+    }
+
+    public void setPin(int pin) {
+        this.pin = pin;
     }
 
     public int getBalance() {
         return balance;
     }
 
-    public Account() {
+    public void setBalance(int balance) {
+        this.balance = balance;
+    }
 
+    public Account() {
     }
 
     public static void firebaseInit() {

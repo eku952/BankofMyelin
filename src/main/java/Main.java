@@ -1,14 +1,13 @@
 import com.google.firebase.database.*;
+import com.google.firebase.internal.Objects;
 
-import java.util.HashMap;
-import java.util.Map;
 import java.util.Scanner;
 
 
 
 public class Main {
 
-    private static int pin = 9999;
+    //private static int pin = 9999;
     private static boolean login = false;
     private static boolean startup = true;
 
@@ -27,24 +26,33 @@ public class Main {
                 System.out.println("Please insert your username.");
                 String tempUsername = scanner.nextLine();
 
-                System.out.println("Please insert your PIN.");
-                int tempPIN = scanner.nextInt();
+                System.out.println("Please insert your pin.");
+                int tempPin = scanner.nextInt();
 
                 reference.addValueEventListener(new ValueEventListener() {
                     @Override
                     public void onDataChange(DataSnapshot dataSnapshot) {
-                        Account mainAccount = dataSnapshot.getValue(Account.class);
-                        System.out.println(mainAccount);
+                        Account pulledAccount = dataSnapshot.getValue(Account.class);
+                        //System.out.println(pulledAccount);
+                        System.out.println(pulledAccount.getUsername());
+                        System.out.println(pulledAccount.getPin());
+
+                        if(tempUsername.equals(pulledAccount.getUsername()) && tempPin == pulledAccount.getPin()) {
+                            System.out.println("Login completed");
+
+                            startup = false;
+                            login = true;
+                        }
+                        else {
+                            System.out.println("Incorrect password");
+                        }
                     }
 
                     @Override
                     public void onCancelled(DatabaseError databaseError) {
-                        System.out.println("Failed to read the database.");
+                        System.out.println("Failed to read: " + databaseError.getCode());
                     }
                 });
-
-                login = true;
-                startup = false;
             }
             else if(response.toLowerCase().equals("no")) {
                 login = true;
@@ -59,12 +67,12 @@ public class Main {
                 System.out.println("Please enter your last name.");
                 String newLastName = scanner.nextLine();
 
-                System.out.println("Please create a PIN (numbers only).");
-                int newPIN = scanner.nextInt();
+                System.out.println("Please create a pin (numbers only).");
+                int newPin = scanner.nextInt();
 
                 DatabaseReference accountRef = reference.child("Accounts");
 
-                accountRef.child(newUsername).setValue(new Account(newFirstName, newLastName, newPIN));
+                accountRef.child(newUsername).setValue(new Account(newUsername, newFirstName, newLastName, newPin));
             }
         }
 
@@ -88,9 +96,17 @@ public class Main {
 
                     System.out.println("You have successfully transferred " + withdrawAmount2 + "to " + transferTarget);
                     break;
-            }
+                case "deposit":
+                    System.out.println("How much would you like to deposit?");
+                    int depositAmount = scanner.nextInt();
 
-            login = false;
+                    System.out.println("Great! You wave deposited " + depositAmount);
+                    break;
+                case "exit":
+                    System.out.println("Shutting down.");
+                    login = false;
+                    break;
+            }
         }
     }
 }
