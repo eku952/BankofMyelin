@@ -16,7 +16,7 @@ public class Main {
 
     public static void main(String[] args) {
         Scanner scanner = new Scanner(System.in);
-        Account.firebaseInit();
+        FirebaseHandling.firebaseInit();
         final FirebaseDatabase database = FirebaseDatabase.getInstance();
         DatabaseReference reference = database.getReference("Users");
         //System.out.println(firebase.toString());
@@ -31,12 +31,16 @@ public class Main {
                 System.out.println("Please insert your pin.");
                 int tempPin = scanner.nextInt();
 
-                reference.addValueEventListener(new ValueEventListener() {
+                DatabaseReference pullRef = reference.child("Accounts/" + tempUsername);
+                pullRef.addListenerForSingleValueEvent(new ValueEventListener() {
                     @Override
                     public void onDataChange(DataSnapshot dataSnapshot) {
                         Account pulledAccount = dataSnapshot.getValue(Account.class);
-                        System.out.println(pulledAccount.username);
-                        System.out.println(pulledAccount.pin);
+                        //pulledAccount = new Account();
+
+                        System.out.println(pulledAccount);
+                        System.out.println(pulledAccount.getUsername());
+                        System.out.println(pulledAccount.getPin());
                     }
 
                     @Override
