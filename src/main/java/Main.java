@@ -1,6 +1,8 @@
 import com.google.firebase.database.*;
 import com.google.firebase.internal.Objects;
 
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Scanner;
 
 
@@ -33,24 +35,13 @@ public class Main {
                     @Override
                     public void onDataChange(DataSnapshot dataSnapshot) {
                         Account pulledAccount = dataSnapshot.getValue(Account.class);
-                        //System.out.println(pulledAccount);
-                        System.out.println(pulledAccount.getUsername());
-                        System.out.println(pulledAccount.getPin());
-
-                        if(tempUsername.equals(pulledAccount.getUsername()) && tempPin == pulledAccount.getPin()) {
-                            System.out.println("Login completed");
-
-                            startup = false;
-                            login = true;
-                        }
-                        else {
-                            System.out.println("Incorrect password");
-                        }
+                        System.out.println(pulledAccount.username);
+                        System.out.println(pulledAccount.pin);
                     }
 
                     @Override
                     public void onCancelled(DatabaseError databaseError) {
-                        System.out.println("Failed to read: " + databaseError.getCode());
+
                     }
                 });
             }
@@ -69,10 +60,21 @@ public class Main {
 
                 System.out.println("Please create a pin (numbers only).");
                 int newPin = scanner.nextInt();
+                int newBalance = 5;
 
                 DatabaseReference accountRef = reference.child("Accounts");
+                accountRef.child(newUsername).setValue(new Account());
 
-                accountRef.child(newUsername).setValue(new Account(newUsername, newFirstName, newLastName, newPin));
+                DatabaseReference newUserRef = reference.child("Accounts/" + newUsername);
+                Map<String, String> newAccount = new HashMap<String, String>();
+
+                newAccount.put("balance", String.valueOf(newBalance));
+                newAccount.put("firstName", newFirstName);
+                newAccount.put("lastName", newLastName);
+                newAccount.put("pin",  String.valueOf(newBalance));
+                newAccount.put("username", newUsername);
+
+                newUserRef.setValue(newAccount);
             }
         }
 
@@ -105,6 +107,7 @@ public class Main {
                 case "exit":
                     System.out.println("Shutting down.");
                     login = false;
+                    System.exit(1);
                     break;
             }
         }

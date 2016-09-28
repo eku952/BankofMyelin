@@ -1,8 +1,7 @@
 import com.firebase.client.Firebase;
 import com.google.firebase.FirebaseApp;
 import com.google.firebase.FirebaseOptions;
-import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.*;
 
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
@@ -29,14 +28,13 @@ public class Account {
         this.username = username;
     }
 
-    public Account(String username, String firstName, String lastName, int pin) {
-        this.username = username;
-
-        this.firstName = firstName;
-        this.lastName = lastName;
-        this.pin = pin;
-        balance = 5;
-    }
+    //public Account(String username, String firstName, String lastName, int pin) {
+        //this.username = username;
+        //this.firstName = firstName;
+        //this.lastName = lastName;
+        //this.pin = pin;
+        //this.balance = 5;
+    //}
 
     public String getFirstName() {
         return firstName;
@@ -95,8 +93,8 @@ public class Account {
 
         DatabaseReference ref = FirebaseDatabase
                 .getInstance()
-                .getReference("Users");
-        /*ref.addListenerForSingleValueEvent(new ValueEventListener() {
+                .getReference("Users/Accounts");
+        ref.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 Object document = dataSnapshot.getValue();
@@ -107,6 +105,6 @@ public class Account {
             public void onCancelled(DatabaseError databaseError) {
 
             }
-        }); */
+        });
     }
 }
