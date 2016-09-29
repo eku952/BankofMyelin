@@ -35,17 +35,20 @@ public class Main {
                 pullRef.addListenerForSingleValueEvent(new ValueEventListener() {
                     @Override
                     public void onDataChange(DataSnapshot dataSnapshot) {
-                        Account pulledAccount = dataSnapshot.getValue(Account.class);
+                        Account mainAccount = dataSnapshot.getValue(Account.class);
                         //pulledAccount = new Account();
 
-                        System.out.println(pulledAccount);
-                        System.out.println(pulledAccount.getUsername());
-                        System.out.println(pulledAccount.getPin());
+                        System.out.println(mainAccount.getUsername());
+                        System.out.println(mainAccount.getPin());
+
+                        if (tempUsername.equals(mainAccount.getUsername()) && tempPin == mainAccount.getPin()) {
+
+                        }
                     }
 
                     @Override
                     public void onCancelled(DatabaseError databaseError) {
-
+                        System.out.println("The read failed: " + databaseError.getCode());
                     }
                 });
             }
