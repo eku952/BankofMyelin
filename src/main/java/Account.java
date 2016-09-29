@@ -14,6 +14,11 @@ public class Account implements java.io.Serializable {
     public String lastName;
     public int pin;
     public int balance;
+    public static String tUsername;
+    public static String tFirstName;
+    public static String tLastName;
+    public static int tPin;
+    public static int tBalance;
 
     final FirebaseDatabase database = FirebaseDatabase.getInstance();
     DatabaseReference reference = database.getReference("Users");
@@ -71,13 +76,25 @@ public class Account implements java.io.Serializable {
     public Account() {
     }
 
-    public static Account transferToLocalAccount(Account incomingAccount) {
-        String transferUsername = incomingAccount.getUsername();
-        String transferFirstName = incomingAccount.getFirstName();
-        String transferLastName = incomingAccount.getLastName();
-        int transferPin = incomingAccount.getPin();
-        int transferBalance = incomingAccount.getBalance();
+    public static Account transferToLocalAccount() {
+        //System.out.println("memes");
 
-        return new Account(transferUsername, transferFirstName, transferLastName, transferPin, transferBalance);
+        try {
+            Thread.sleep(1000);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+
+        return new Account(tUsername, tFirstName, tLastName, tPin, tBalance);
+    }
+
+    public static void transferToLocalVariables(String usernameTL, String firstNameTL, String lastNameTL, int pinTL, int balanceTL) {
+        tUsername = usernameTL;
+        tFirstName = firstNameTL;
+        tLastName = lastNameTL;
+        tPin = pinTL;
+        tBalance = balanceTL;
+
+        //System.out.println(usernameTL);
     }
 }

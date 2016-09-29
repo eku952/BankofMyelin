@@ -38,19 +38,18 @@ public class Main {
                         Account pulledAccount = dataSnapshot.getValue(Account.class);
                         //pulledAccount = new Account();
 
-                        System.out.println(pulledAccount.getUsername());
-                        System.out.println(pulledAccount.getPin());
+                        //System.out.println(pulledAccount.getUsername() + " Puled down");
+                        //System.out.println(pulledAccount.getPin());
 
-                        if (tempUsername.equals(pulledAccount.getUsername()) && tempPin == pulledAccount.getPin()) {
-                            startup = false;
-                            login = true;
-
-                            mainAccount = Account.transferToLocalAccount(pulledAccount);
-
-                            System.out.println("Login successful");
-                        } else {
-                            System.out.println("Login failed");
+                        try {
+                            Thread.sleep(2000);
+                            //System.out.println("sleeping");
+                        } catch (InterruptedException e) {
+                            e.printStackTrace();
                         }
+
+                        Account.transferToLocalVariables(pulledAccount.getUsername(), pulledAccount.getFirstName(), pulledAccount.getLastName(), pulledAccount.getPin(), pulledAccount.getBalance());
+
                     }
 
                     @Override
@@ -59,6 +58,25 @@ public class Main {
                     }
                 });
 
+                try {
+                    Thread.sleep(2000);
+                    //System.out.println("sleeping");
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+
+                mainAccount = Account.transferToLocalAccount();
+
+                if (tempUsername.equals(mainAccount.getUsername()) && tempPin == mainAccount.getPin()) {
+                    startup = false;
+                    login = true;
+
+                    //System.out.println(mainAccount.getPin());
+                    System.out.println("Login successful");
+                    break;
+                } else {
+                    System.out.println("Login failed");
+                }
             }
         }
         else if(response.toLowerCase().equals("no")) {
