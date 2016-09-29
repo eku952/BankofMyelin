@@ -28,13 +28,13 @@ public class Account implements java.io.Serializable {
         this.username = username;
     }
 
-    //public Account(String username, String firstName, String lastName, int pin) {
-        //this.username = username;
-        //this.firstName = firstName;
-        //this.lastName = lastName;
-        //this.pin = pin;
-        //this.balance = 5;
-    //}
+    public Account(String username, String firstName, String lastName, int pin, int balance) {
+        this.username = username;
+        this.firstName = firstName;
+        this.lastName = lastName;
+        this.pin = pin;
+        this.balance = balance;
+    }
 
     public String getFirstName() {
         return firstName;
@@ -69,5 +69,15 @@ public class Account implements java.io.Serializable {
     }
 
     public Account() {
+    }
+
+    public static Account transferToLocalAccount(Account incomingAccount) {
+        String transferUsername = incomingAccount.getUsername();
+        String transferFirstName = incomingAccount.getFirstName();
+        String transferLastName = incomingAccount.getLastName();
+        int transferPin = incomingAccount.getPin();
+        int transferBalance = incomingAccount.getBalance();
+
+        return new Account(transferUsername, transferFirstName, transferLastName, transferPin, transferBalance);
     }
 }

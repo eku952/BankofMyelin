@@ -41,7 +41,7 @@ public class FirebaseHandling {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 Object document = dataSnapshot.getValue();
-                System.out.println(document);
+                //System.out.println(document);
             }
 
             @Override

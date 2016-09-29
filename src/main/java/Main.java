@@ -12,7 +12,7 @@ public class Main {
     //private static int pin = 9999;
     private static boolean login = false;
     private static boolean startup = true;
-
+    private static Account mainAccount;
 
     public static void main(String[] args) {
         Scanner scanner = new Scanner(System.in);
@@ -20,13 +20,13 @@ public class Main {
         final FirebaseDatabase database = FirebaseDatabase.getInstance();
         DatabaseReference reference = database.getReference("Users");
         //System.out.println(firebase.toString());
+        System.out.println("Welcome to the Bank of Myelin! Do you have an account?");
+        String response = scanner.nextLine();
 
-        while(startup) {
-            System.out.println("Welcome to the Bank of Myelin! Do you have an account?");
-            String response = scanner.nextLine();
-            if(response.toLowerCase().equals("yes")) {
+        if(response.toLowerCase().equals("yes")) {
+            while(startup) {
                 System.out.println("Please insert your username.");
-                String tempUsername = scanner.nextLine();
+                String tempUsername = scanner.next();
 
                 System.out.println("Please insert your pin.");
                 int tempPin = scanner.nextInt();
@@ -35,14 +35,21 @@ public class Main {
                 pullRef.addListenerForSingleValueEvent(new ValueEventListener() {
                     @Override
                     public void onDataChange(DataSnapshot dataSnapshot) {
-                        Account mainAccount = dataSnapshot.getValue(Account.class);
+                        Account pulledAccount = dataSnapshot.getValue(Account.class);
                         //pulledAccount = new Account();
 
-                        System.out.println(mainAccount.getUsername());
-                        System.out.println(mainAccount.getPin());
+                        System.out.println(pulledAccount.getUsername());
+                        System.out.println(pulledAccount.getPin());
 
-                        if (tempUsername.equals(mainAccount.getUsername()) && tempPin == mainAccount.getPin()) {
+                        if (tempUsername.equals(pulledAccount.getUsername()) && tempPin == pulledAccount.getPin()) {
+                            startup = false;
+                            login = true;
 
+                            mainAccount = Account.transferToLocalAccount(pulledAccount);
+
+                            System.out.println("Login successful");
+                        } else {
+                            System.out.println("Login failed");
                         }
                     }
 
@@ -51,38 +58,39 @@ public class Main {
                         System.out.println("The read failed: " + databaseError.getCode());
                     }
                 });
+
             }
-            else if(response.toLowerCase().equals("no")) {
-                login = true;
-                startup = false;
+        }
+        else if(response.toLowerCase().equals("no")) {
+            login = true;
+            startup = false;
 
-                System.out.println("Please create a username.");
-                String newUsername = scanner.nextLine();
+            System.out.println("Please create a username.");
+            String newUsername = scanner.nextLine();
 
-                System.out.println("Please enter your first name.");
-                String newFirstName = scanner.nextLine();
+            System.out.println("Please enter your first name.");
+            String newFirstName = scanner.nextLine();
 
-                System.out.println("Please enter your last name.");
-                String newLastName = scanner.nextLine();
+            System.out.println("Please enter your last name.");
+            String newLastName = scanner.nextLine();
 
-                System.out.println("Please create a pin (numbers only).");
-                int newPin = scanner.nextInt();
-                int newBalance = 5;
+            System.out.println("Please create a pin (numbers only).");
+            int newPin = scanner.nextInt();
+            int newBalance = 5;
 
-                DatabaseReference accountRef = reference.child("Accounts");
-                accountRef.child(newUsername).setValue(new Account());
+            DatabaseReference accountRef = reference.child("Accounts");
+            accountRef.child(newUsername).setValue(new Account());
 
-                DatabaseReference newUserRef = reference.child("Accounts/" + newUsername);
-                Map<String, String> newAccount = new HashMap<String, String>();
+            DatabaseReference newUserRef = reference.child("Accounts/" + newUsername);
+            Map<String, String> newAccount = new HashMap<String, String>();
 
-                newAccount.put("balance", String.valueOf(newBalance));
-                newAccount.put("firstName", newFirstName);
-                newAccount.put("lastName", newLastName);
-                newAccount.put("pin",  String.valueOf(newBalance));
-                newAccount.put("username", newUsername);
+            newAccount.put("balance", String.valueOf(newBalance));
+            newAccount.put("firstName", newFirstName);
+            newAccount.put("lastName", newLastName);
+            newAccount.put("pin",  String.valueOf(newBalance));
+            newAccount.put("username", newUsername);
 
-                newUserRef.setValue(newAccount);
-            }
+            newUserRef.setValue(newAccount);
         }
 
         while(login) {
