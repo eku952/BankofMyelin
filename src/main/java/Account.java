@@ -5,15 +5,14 @@ import com.google.firebase.database.*;
 
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
-import java.util.HashMap;
-import java.util.Map;
 import java.util.Scanner;
 
-public class Account {
+public class Account implements java.io.Serializable {
 
+    public String username;
     public String firstName;
     public String lastName;
-    public int PIN;
+    public int pin;
     public int balance;
 
     final FirebaseDatabase database = FirebaseDatabase.getInstance();
@@ -21,47 +20,54 @@ public class Account {
     public static Firebase firebase = null;
     static Scanner scanner = new Scanner(System.in);
 
-    public Account(String firstName, String lastName, int PIN) {
-        this.firstName = firstName;
-        this.lastName = lastName;
-        this.PIN = PIN;
-        balance = 5;
+    public String getUsername() {
+        return username;
     }
 
-    public static void firebaseInit() {
-        firebase = new Firebase("https://bank-of-myelin.firebaseio.com/");
+    public void setUsername(String username) {
+        this.username = username;
+    }
 
+    //public Account(String username, String firstName, String lastName, int pin) {
+        //this.username = username;
+        //this.firstName = firstName;
+        //this.lastName = lastName;
+        //this.pin = pin;
+        //this.balance = 5;
+    //}
 
-        // Initialize Firebase
-        try {
-            // [START initialize]
-            FirebaseOptions options = new FirebaseOptions.Builder()
-                    .setServiceAccount(new FileInputStream("service-account.json"))
-                    .setDatabaseUrl("https://bank-of-myelin.firebaseio.com/")
-                    .build();
-            FirebaseApp.initializeApp(options);
-            // [END initialize]
-        } catch (FileNotFoundException e) {
-            System.out.println("ERROR: invalid service account credentials. See README.");
-            System.out.println(e.getMessage());
+    public String getFirstName() {
+        return firstName;
+    }
 
-            System.exit(1);
-        }
+    public void setFirstName(String firstName) {
+        this.firstName = firstName;
+    }
 
-        DatabaseReference ref = FirebaseDatabase
-                .getInstance()
-                .getReference("Users");
-        /*ref.addListenerForSingleValueEvent(new ValueEventListener() {
-            @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-                Object document = dataSnapshot.getValue();
-                System.out.println(document);
-            }
+    public String getLastName() {
+        return lastName;
+    }
 
-            @Override
-            public void onCancelled(DatabaseError databaseError) {
+    public void setLastName(String lastName) {
+        this.lastName = lastName;
+    }
 
-            }
-        }); */
+    public int getPin() {
+        return pin;
+    }
+
+    public void setPin(int pin) {
+        this.pin = pin;
+    }
+
+    public int getBalance() {
+        return balance;
+    }
+
+    public void setBalance(int balance) {
+        this.balance = balance;
+    }
+
+    public Account() {
     }
 }

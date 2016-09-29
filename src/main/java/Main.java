@@ -1,5 +1,5 @@
-import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.*;
+import com.google.firebase.internal.Objects;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -9,14 +9,14 @@ import java.util.Scanner;
 
 public class Main {
 
-    private static int pin = 9999;
+    //private static int pin = 9999;
     private static boolean login = false;
     private static boolean startup = true;
 
 
     public static void main(String[] args) {
         Scanner scanner = new Scanner(System.in);
-        Account.firebaseInit();
+        FirebaseHandling.firebaseInit();
         final FirebaseDatabase database = FirebaseDatabase.getInstance();
         DatabaseReference reference = database.getReference("Users");
         //System.out.println(firebase.toString());
@@ -28,11 +28,29 @@ public class Main {
                 System.out.println("Please insert your username.");
                 String tempUsername = scanner.nextLine();
 
-                System.out.println("Please insert your PIN.");
-                int tempPIN = scanner.nextInt();
+                System.out.println("Please insert your pin.");
+                int tempPin = scanner.nextInt();
 
-                login = true;
-                startup = false;
+                DatabaseReference pullRef = reference.child("Accounts/" + tempUsername);
+                pullRef.addListenerForSingleValueEvent(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(DataSnapshot dataSnapshot) {
+                        Account mainAccount = dataSnapshot.getValue(Account.class);
+                        //pulledAccount = new Account();
+
+                        System.out.println(mainAccount.getUsername());
+                        System.out.println(mainAccount.getPin());
+
+                        if (tempUsername.equals(mainAccount.getUsername()) && tempPin == mainAccount.getPin()) {
+
+                        }
+                    }
+
+                    @Override
+                    public void onCancelled(DatabaseError databaseError) {
+                        System.out.println("The read failed: " + databaseError.getCode());
+                    }
+                });
             }
             else if(response.toLowerCase().equals("no")) {
                 login = true;
@@ -47,12 +65,23 @@ public class Main {
                 System.out.println("Please enter your last name.");
                 String newLastName = scanner.nextLine();
 
-                System.out.println("Please create a PIN (numbers only).");
-                int newPIN = scanner.nextInt();
+                System.out.println("Please create a pin (numbers only).");
+                int newPin = scanner.nextInt();
+                int newBalance = 5;
 
                 DatabaseReference accountRef = reference.child("Accounts");
+                accountRef.child(newUsername).setValue(new Account());
 
-                accountRef.child(newUsername).setValue(new Account(newFirstName, newLastName, newPIN));
+                DatabaseReference newUserRef = reference.child("Accounts/" + newUsername);
+                Map<String, String> newAccount = new HashMap<String, String>();
+
+                newAccount.put("balance", String.valueOf(newBalance));
+                newAccount.put("firstName", newFirstName);
+                newAccount.put("lastName", newLastName);
+                newAccount.put("pin",  String.valueOf(newBalance));
+                newAccount.put("username", newUsername);
+
+                newUserRef.setValue(newAccount);
             }
         }
 
@@ -76,9 +105,18 @@ public class Main {
 
                     System.out.println("You have successfully transferred " + withdrawAmount2 + "to " + transferTarget);
                     break;
-            }
+                case "deposit":
+                    System.out.println("How much would you like to deposit?");
+                    int depositAmount = scanner.nextInt();
 
-            login = false;
+                    System.out.println("Great! You wave deposited " + depositAmount);
+                    break;
+                case "exit":
+                    System.out.println("Shutting down.");
+                    login = false;
+                    System.exit(1);
+                    break;
+            }
         }
     }
 }
