@@ -97,18 +97,7 @@ public class Main {
             int newBalance = 5;
 
             DatabaseReference accountRef = reference.child("Accounts");
-            accountRef.child(newUsername).setValue(new Account());
-
-            DatabaseReference newUserRef = reference.child("Accounts/" + newUsername);
-            Map<String, String> newAccount = new HashMap<String, String>();
-
-            newAccount.put("balance", String.valueOf(newBalance));
-            newAccount.put("firstName", newFirstName);
-            newAccount.put("lastName", newLastName);
-            newAccount.put("pin",  String.valueOf(newBalance));
-            newAccount.put("username", newUsername);
-
-            newUserRef.setValue(newAccount);
+            accountRef.child(newUsername).setValue(new Account(newUsername, newFirstName, newLastName, newPin, newBalance));
         }
 
         while(login) {
