@@ -48,7 +48,11 @@ public class Main {
                             e.printStackTrace();
                         }
 
-                        Account.transferToLocalVariables(pulledAccount.getUsername(), pulledAccount.getFirstName(), pulledAccount.getLastName(), pulledAccount.getPin(), pulledAccount.getBalance());
+                        try {
+                            Account.transferToLocalVariables(pulledAccount.getUsername(), pulledAccount.getFirstName(), pulledAccount.getLastName(), pulledAccount.getPin(), pulledAccount.getBalance());
+                        } catch (Exception e) {
+                            System.out.println("That username does not match any usernames in the database.");
+                        }
 
                     }
 
