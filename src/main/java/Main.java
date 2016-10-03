@@ -18,6 +18,7 @@ public class Main {
     public static void main(String[] args) {
         Scanner scanner = new Scanner(System.in);
         FirebaseHandling.firebaseInit();
+        //FirebaseHandling.checkVersion();
         final FirebaseDatabase database = FirebaseDatabase.getInstance();
         DatabaseReference reference = database.getReference("Users");
         //System.out.println(firebase.toString());
@@ -32,6 +33,7 @@ public class Main {
                 System.out.println("Please insert your pin.");
                 int tempPin = scanner.nextInt();
 
+                System.out.println("Loading...");
                 DatabaseReference pullRef = reference.child("Accounts/" + tempUsername);
                 pullRef.addListenerForSingleValueEvent(new ValueEventListener() {
                     @Override
@@ -99,10 +101,13 @@ public class Main {
 
             System.out.println("Please create a pin (numbers only).");
             int newPin = scanner.nextInt();
+
+            System.out.println("You by default have 5 Myelin bucks in your account");
             int newBalance = 5;
 
             DatabaseReference accountRef = reference.child("Accounts");
             accountRef.child(newUsername).setValue(new Account(newUsername, newFirstName, newLastName, newPin, newBalance));
+            mainAccount = new Account(newUsername, newFirstName, newLastName, newPin, newBalance);
         }
 
         while(login) {
@@ -121,7 +126,9 @@ public class Main {
                     String transferTarget = scanner.next();
                     //FirebaseHandling.pullTransferTarget(transferTarget);
 
+                    System.out.println("Loading...");
                     DatabaseReference pullRef2 = reference.child("Accounts/" + transferTarget);
+                    DatabaseReference pullRef3 = reference.child("Accounts/" + mainAccount.getUsername());
                     pullRef2.addListenerForSingleValueEvent(new ValueEventListener() {
                         @Override
                         public void onDataChange(DataSnapshot dataSnapshot) {
@@ -169,7 +176,9 @@ public class Main {
                         mainAccount.setBalance(mainAccount.getBalance() - withdrawAmount2);
 
                         DatabaseReference pushRef = pullRef2.child("balance");
+                        DatabaseReference pushRef2 = pullRef3.child("balance");
                         pushRef.setValue(transferredAccount.getBalance());
+                        pushRef2.setValue(mainAccount.getBalance());
 
                         System.out.println("You have successfully transferred " + withdrawAmount2 + " to " + transferTarget);
                         //System.out.println(transferredAccount.getBalance());
@@ -183,7 +192,19 @@ public class Main {
                     System.out.println("How much would you like to deposit?");
                     int depositAmount = scanner.nextInt();
 
-                    System.out.println("Great! You wave deposited " + depositAmount);
+                    System.out.println("Please enter the administrative password to deposit " + depositAmount + " into your account.");
+                    int adminPass = scanner.nextInt();
+
+                    if(adminPass == 9999) {
+                        mainAccount.setBalance(mainAccount.getBalance() + depositAmount);
+                        DatabaseReference pushRef4 = reference.child("Accounts/" + mainAccount.getUsername() + "/balance");
+
+                        pushRef4.setValue(mainAccount.getBalance());
+                        System.out.println("Great! You wave deposited " + depositAmount);
+                    } else {
+                        System.out.println("That administrative password is incorrect");
+                    }
+
                     break;
                 case "checkbalance":
                     System.out.println("Your balance is: " + mainAccount.getBalance());
