@@ -13,6 +13,7 @@ public class Main {
     private static boolean login = false;
     private static boolean startup = true;
     private static Account mainAccount;
+    private static Account transferredAccount;
 
     public static void main(String[] args) {
         Scanner scanner = new Scanner(System.in);
@@ -105,30 +106,87 @@ public class Main {
         }
 
         while(login) {
-            System.out.println("Would you like to withdraw, transfer, deposit myelin bucks or exit?");
+            System.out.println("Would you like to transfer, deposit, check your balance (use command checkbalance), or exit?");
             String responseS = scanner.next();
 
             switch(responseS.toLowerCase()) {
-                case "withdraw":
+                /*case "withdraw":
                     System.out.println("How much money would you like to withdraw?");
                     int withdrawAmount = scanner.nextInt();
                     
                     System.out.println("Great! You have withdrawn " + withdrawAmount);
-                    break;
+                    break; */
                 case "transfer":
                     System.out.println("Who would you like to transfer your myelin bucks to?");
-                    String transferTarget = scanner.nextLine();
+                    String transferTarget = scanner.next();
+                    //FirebaseHandling.pullTransferTarget(transferTarget);
+
+                    DatabaseReference pullRef2 = reference.child("Accounts/" + transferTarget);
+                    pullRef2.addListenerForSingleValueEvent(new ValueEventListener() {
+                        @Override
+                        public void onDataChange(DataSnapshot dataSnapshot) {
+                            Account pulledAccount2 = dataSnapshot.getValue(Account.class);
+                            //pulledAccount = new Account();
+
+                            //System.out.println(pulledAccount.getUsername() + " Puled down");
+                            //System.out.println(pulledAccount.getPin());
+
+                            try {
+                                Thread.sleep(2000);
+                                //System.out.println("sleeping");
+                            } catch (InterruptedException e) {
+                                e.printStackTrace();
+                            }
+
+                            try {
+                                Account.transferToLocalVariables(pulledAccount2.getUsername(), pulledAccount2.getFirstName(), pulledAccount2.getLastName(), pulledAccount2.getPin(), pulledAccount2.getBalance());
+                            } catch (Exception e) {
+                                System.out.println("That username does not match any usernames in the database.");
+                            }
+
+                        }
+
+                        @Override
+                        public void onCancelled(DatabaseError databaseError) {
+                            System.out.println("The read failed: " + databaseError.getCode());
+                        }
+                    });
+
+                    try {
+                        Thread.sleep(2000);
+                        //System.out.println("sleeping");
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
+
+                    transferredAccount = Account.transferToLocalAccount();
 
                     System.out.println("How many myelin bucks do you want to transfer to " + transferTarget + "?");
                     int withdrawAmount2 = scanner.nextInt();
 
-                    System.out.println("You have successfully transferred " + withdrawAmount2 + "to " + transferTarget);
+                    if(mainAccount.getBalance() >= withdrawAmount2) {
+                        transferredAccount.setBalance(transferredAccount.getBalance() + withdrawAmount2);
+                        mainAccount.setBalance(mainAccount.getBalance() - withdrawAmount2);
+
+                        DatabaseReference pushRef = pullRef2.child("balance");
+                        pushRef.setValue(transferredAccount.getBalance());
+
+                        System.out.println("You have successfully transferred " + withdrawAmount2 + " to " + transferTarget);
+                        //System.out.println(transferredAccount.getBalance());
+                        //System.out.println(mainAccount.getBalance());
+                    }
+                    else {
+                        System.out.println("You cannot withdraw that many Myelin Bucks.");
+                    }
                     break;
                 case "deposit":
                     System.out.println("How much would you like to deposit?");
                     int depositAmount = scanner.nextInt();
 
                     System.out.println("Great! You wave deposited " + depositAmount);
+                    break;
+                case "checkbalance":
+                    System.out.println("Your balance is: " + mainAccount.getBalance());
                     break;
                 case "exit":
                     System.out.println("Shutting down.");

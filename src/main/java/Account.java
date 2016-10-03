@@ -88,6 +88,14 @@ public class Account implements java.io.Serializable {
         return new Account(tUsername, tFirstName, tLastName, tPin, tBalance);
     }
 
+    public static int gettBalance() {
+        return tBalance;
+    }
+
+    public static void settBalance(int tBalance) {
+        Account.tBalance = tBalance;
+    }
+
     public static void transferToLocalVariables(String usernameTL, String firstNameTL, String lastNameTL, int pinTL, int balanceTL) {
         tUsername = usernameTL;
         tFirstName = firstNameTL;
