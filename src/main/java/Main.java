@@ -32,6 +32,7 @@ public class Main {
                 System.out.println("Please insert your pin.");
                 int tempPin = scanner.nextInt();
 
+                System.out.println("Loading...");
                 DatabaseReference pullRef = reference.child("Accounts/" + tempUsername);
                 pullRef.addListenerForSingleValueEvent(new ValueEventListener() {
                     @Override
@@ -121,6 +122,7 @@ public class Main {
                     String transferTarget = scanner.next();
                     //FirebaseHandling.pullTransferTarget(transferTarget);
 
+                    System.out.println("Loading...");
                     DatabaseReference pullRef2 = reference.child("Accounts/" + transferTarget);
                     DatabaseReference pullRef3 = reference.child("Accounts/" + mainAccount.getUsername());
                     pullRef2.addListenerForSingleValueEvent(new ValueEventListener() {
@@ -186,7 +188,19 @@ public class Main {
                     System.out.println("How much would you like to deposit?");
                     int depositAmount = scanner.nextInt();
 
-                    System.out.println("Great! You wave deposited " + depositAmount);
+                    System.out.println("Please enter the administrative password to deposit " + depositAmount + " into your account.");
+                    int adminPass = scanner.nextInt();
+
+                    if(adminPass == 9999) {
+                        mainAccount.setBalance(mainAccount.getBalance() + depositAmount);
+                        DatabaseReference pushRef4 = reference.child("Accounts/" + mainAccount.getUsername() + "/balance");
+
+                        pushRef4.setValue(mainAccount.getBalance());
+                        System.out.println("Great! You wave deposited " + depositAmount);
+                    } else {
+                        System.out.println("That administrative password is incorrect");
+                    }
+
                     break;
                 case "checkbalance":
                     System.out.println("Your balance is: " + mainAccount.getBalance());
