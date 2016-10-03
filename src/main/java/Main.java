@@ -122,6 +122,7 @@ public class Main {
                     //FirebaseHandling.pullTransferTarget(transferTarget);
 
                     DatabaseReference pullRef2 = reference.child("Accounts/" + transferTarget);
+                    DatabaseReference pullRef3 = reference.child("Accounts/" + mainAccount.getUsername());
                     pullRef2.addListenerForSingleValueEvent(new ValueEventListener() {
                         @Override
                         public void onDataChange(DataSnapshot dataSnapshot) {
@@ -169,7 +170,9 @@ public class Main {
                         mainAccount.setBalance(mainAccount.getBalance() - withdrawAmount2);
 
                         DatabaseReference pushRef = pullRef2.child("balance");
+                        DatabaseReference pushRef2 = pullRef3.child("balance");
                         pushRef.setValue(transferredAccount.getBalance());
+                        pushRef2.setValue(mainAccount.getBalance());
 
                         System.out.println("You have successfully transferred " + withdrawAmount2 + " to " + transferTarget);
                         //System.out.println(transferredAccount.getBalance());
