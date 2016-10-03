@@ -9,6 +9,21 @@ import java.util.Scanner;
 
 public class FirebaseHandling {
 
+    private static final double currentVersion = 1.0;
+    public double version;
+
+    public double getVersion() {
+        return version;
+    }
+
+    public void setVersion(double version) {
+        this.version = version;
+    }
+
+    public FirebaseHandling() {
+
+    }
+
     final FirebaseDatabase database = FirebaseDatabase.getInstance();
     //  static final FirebaseDatabase staticDatabase = FirebaseDatabase.getInstance();
     DatabaseReference reference = database.getReference("Users");
@@ -51,6 +66,27 @@ public class FirebaseHandling {
             }
         });
     }
+
+    /*public static void checkVersion() {
+        final FirebaseDatabase database2 = FirebaseDatabase.getInstance();
+        DatabaseReference ref = database2.getReference("Version/versioncontrol");
+
+        ref.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                FirebaseHandling pulledVersion = dataSnapshot.getValue(FirebaseHandling.class);
+
+                if(pulledVersion.getVersion() != currentVersion) {
+                    System.out.println("WARNING! Your current version is out of date! Updating your client is recommended");
+                }
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+                System.out.println("The read failed:" + databaseError.getCode());
+            }
+        });
+    } */
 
     /*public static void pullTransferTarget(String transferTarget) {
         final FirebaseDatabase database2 = FirebaseDatabase.getInstance();

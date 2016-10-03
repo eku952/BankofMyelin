@@ -18,6 +18,7 @@ public class Main {
     public static void main(String[] args) {
         Scanner scanner = new Scanner(System.in);
         FirebaseHandling.firebaseInit();
+        //FirebaseHandling.checkVersion();
         final FirebaseDatabase database = FirebaseDatabase.getInstance();
         DatabaseReference reference = database.getReference("Users");
         //System.out.println(firebase.toString());
@@ -100,10 +101,13 @@ public class Main {
 
             System.out.println("Please create a pin (numbers only).");
             int newPin = scanner.nextInt();
+
+            System.out.println("You by default have 5 Myelin bucks in your account");
             int newBalance = 5;
 
             DatabaseReference accountRef = reference.child("Accounts");
             accountRef.child(newUsername).setValue(new Account(newUsername, newFirstName, newLastName, newPin, newBalance));
+            mainAccount = new Account(newUsername, newFirstName, newLastName, newPin, newBalance);
         }
 
         while(login) {
