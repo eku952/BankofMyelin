@@ -106,7 +106,7 @@ public class Main {
         }
 
         while(login) {
-            System.out.println("Would you like to transfer, deposit myelin bucks or exit?");
+            System.out.println("Would you like to transfer, deposit, check your balance (use command checkbalance), or exit?");
             String responseS = scanner.next();
 
             switch(responseS.toLowerCase()) {
@@ -168,9 +168,12 @@ public class Main {
                         transferredAccount.setBalance(transferredAccount.getBalance() + withdrawAmount2);
                         mainAccount.setBalance(mainAccount.getBalance() - withdrawAmount2);
 
+                        DatabaseReference pushRef = pullRef2.child("balance");
+                        pushRef.setValue(transferredAccount.getBalance());
+
                         System.out.println("You have successfully transferred " + withdrawAmount2 + " to " + transferTarget);
-                        System.out.println(transferredAccount.getBalance());
-                        System.out.println(mainAccount.getBalance());
+                        //System.out.println(transferredAccount.getBalance());
+                        //System.out.println(mainAccount.getBalance());
                     }
                     else {
                         System.out.println("You cannot withdraw that many Myelin Bucks.");
@@ -181,6 +184,9 @@ public class Main {
                     int depositAmount = scanner.nextInt();
 
                     System.out.println("Great! You wave deposited " + depositAmount);
+                    break;
+                case "checkbalance":
+                    System.out.println("Your balance is: " + mainAccount.getBalance());
                     break;
                 case "exit":
                     System.out.println("Shutting down.");
