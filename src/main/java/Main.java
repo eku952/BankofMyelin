@@ -1,8 +1,5 @@
 import com.google.firebase.database.*;
-import com.google.firebase.internal.Objects;
 
-import java.util.HashMap;
-import java.util.Map;
 import java.util.Scanner;
 
 
@@ -200,7 +197,7 @@ public class Main {
                         DatabaseReference pushRef4 = reference.child("Accounts/" + mainAccount.getUsername() + "/balance");
 
                         pushRef4.setValue(mainAccount.getBalance());
-                        System.out.println("Great! You wave deposited " + depositAmount);
+                        System.out.println("Great! You have deposited " + depositAmount);
                     } else {
                         System.out.println("That administrative password is incorrect");
                     }

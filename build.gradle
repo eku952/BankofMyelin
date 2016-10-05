@@ -1,6 +1,7 @@
 version '1.0-SNAPSHOT'
 
 apply plugin: 'java'
+apply plugin: 'java-library-distribution'
 
 sourceCompatibility = 1.8
 
@@ -14,4 +15,20 @@ dependencies {
     compile 'com.google.firebase:firebase-server-sdk:3.0.1'
     // https://mvnrepository.com/artifact/com.firebase/firebase-client-jvm
     compile group: 'com.firebase', name: 'firebase-client-jvm', version: '2.5.2'
+    compile 'org.apache.commons:commons-lang3:3.3.2'
 }
+
+
+task fatJar(type: Jar) {
+	manifest {
+        attributes 'Implementation-Title': 'Bank of Myelin',
+                'Implementation-Version': 1.0,
+                'Main-Class': 'Main'
+
+    }
+    baseName = project.name + '-all'
+    from { configurations.compile.collect { it.isDirectory() ? it : zipTree(it) } }
+    with jar
+}
+
+

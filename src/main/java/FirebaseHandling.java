@@ -35,20 +35,13 @@ public class FirebaseHandling {
 
 
         // Initialize Firebase
-        try {
-            // [START initialize]
-            FirebaseOptions options = new FirebaseOptions.Builder()
-                    .setServiceAccount(new FileInputStream("service-account.json"))
-                    .setDatabaseUrl("https://bank-of-myelin.firebaseio.com/")
-                    .build();
-            FirebaseApp.initializeApp(options);
-            // [END initialize]
-        } catch (FileNotFoundException e) {
-            System.out.println("ERROR: invalid service account credentials. See README.");
-            System.out.println(e.getMessage());
-
-            System.exit(1);
-        }
+        // [START initialize]
+        FirebaseOptions options = new FirebaseOptions.Builder()
+                .setServiceAccount(FirebaseHandling.class.getClassLoader().getResourceAsStream("service-account.json"))
+                .setDatabaseUrl("https://bank-of-myelin.firebaseio.com/")
+                .build();
+        FirebaseApp.initializeApp(options);
+        // [END initialize]
 
         DatabaseReference ref = FirebaseDatabase
                 .getInstance()
